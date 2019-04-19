@@ -11,7 +11,9 @@ LIBP=$(shell ocamlc -where)
 
 
 all:
-	ocamlopt -verbose -fPIC  mod.ml modwrap.c main.c -o prog
+	ocamlopt -a -verbose -fPIC -ccopt "-lsodium" sodium.ml sodium_stubs.c -o sodium.cmxa
+	ocamlopt -verbose -fPIC sodium.ml sodium_stubs.c main.ml -o prog1
+	./prog1
 
 clean:
-	rm -vf *.cmi *.cmo *.o *.a *.cmx prog
+	rm -vf *.cmi *.cmo *.o *.a *.cmx *.out *.cmxa prog prog1
