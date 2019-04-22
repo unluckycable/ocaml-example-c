@@ -1,0 +1,6 @@
+(library
+ (name            sodium)
+ (c_names         sodium_stubs)
+ (c_flags         ( -Wall --std=c99 -pedantic -Werror -Wno-pointer-sign ))
+ (c_library_flags ( -lsodium ))
+)

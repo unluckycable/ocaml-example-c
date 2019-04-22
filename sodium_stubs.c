@@ -14,15 +14,15 @@
 #include <caml/alloc.h>
 #include <caml/custom.h>
 
-static struct custom_operations sodium_example = {
-  "sodium.example",
-  custom_finalize_default,
-  custom_compare_default,
-  custom_hash_default,
-  custom_serialize_default,
-  custom_deserialize_default,
-  custom_compare_ext_default
-};
+/* static struct custom_operations sodium_example = { */
+/*   "sodium.example", */
+/*   custom_finalize_default, */
+/*   custom_compare_default, */
+/*   custom_hash_default, */
+/*   custom_serialize_default, */
+/*   custom_deserialize_default, */
+/*   custom_compare_ext_default */
+/* }; */
 
 value caml_crypto_aead_xchacha20poly1305_ietf_keygen(value unit) {
   CAMLparam1 ( unit );
@@ -67,10 +67,10 @@ value caml_crypto_aead_xchacha20poly1305_ietf_encrypt(value message, value nonce
   size_t message_len = caml_string_length(message);
   unsigned char * message_raw = String_val(message);
 
-  const size_t nonce_len = caml_string_length(nonce);
+  // const size_t nonce_len = caml_string_length(nonce);
   unsigned char * nonce_raw = String_val(nonce);
 
-  const size_t pkey_len = caml_string_length(pkey);
+  // const size_t pkey_len = caml_string_length(pkey);
   unsigned char * pkey_raw = String_val(pkey);
 
   unsigned char * ciphertext_raw = NULL;
@@ -101,10 +101,10 @@ value caml_crypto_aead_xchacha20poly1305_ietf_decrypt(value ciphertext, value no
   const size_t ciphertext_len = caml_string_length(ciphertext);
   unsigned char * ciphertext_raw = String_val(ciphertext);
 
-  const size_t nonce_len = caml_string_length(nonce);
+  // const size_t nonce_len = caml_string_length(nonce);
   unsigned char * nonce_raw = String_val(nonce);
 
-  const size_t pkey_len = caml_string_length(pkey);
+  // const size_t pkey_len = caml_string_length(pkey);
   unsigned char * pkey_raw = String_val(pkey);
 
   const unsigned int message_size = 1025;
