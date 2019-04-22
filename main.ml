@@ -11,4 +11,7 @@ let () =
   print_endline("ciphertext: " ^ ciphertext);
   let decrypted = Sodium.crypto_aead_xchacha20poly1305_ietf_decrypt ciphertext nonce pkey in
   print_endline ("decrypted: " ^ decrypted);
-    
+  print_endline (message);
+  print_endline (decrypted);
+  assert (String.equal message decrypted);
+  assert ((String.length message) == (String.length decrypted));

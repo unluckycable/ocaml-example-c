@@ -27,13 +27,16 @@ static struct custom_operations sodium_example = {
 value caml_crypto_aead_xchacha20poly1305_ietf_keygen(value unit) {
   CAMLparam1 ( unit );
   CAMLlocal1 ( key );
+
   const int s = crypto_aead_xchacha20poly1305_ietf_KEYBYTES;
   unsigned char * raw_data = NULL;
-  key = caml_alloc_string( s );
-  raw_data = String_val( key );
-  memset( raw_data, 0, s );
-  crypto_aead_xchacha20poly1305_ietf_keygen( raw_data );
 
+  key = caml_alloc_string ( s );
+  raw_data = String_val ( key );
+
+  memset( raw_data, 0, s );
+
+  crypto_aead_xchacha20poly1305_ietf_keygen ( raw_data );
   CAMLreturn ( key );
 }
 
@@ -44,11 +47,10 @@ value caml_random_buffer(value size) {
 
   int s = Int_val ( size );
   buffer = caml_alloc_string( s );
-  
   raw_data = String_val( buffer );
   memset( raw_data, 0, s );
   randombytes_buf( raw_data, s );
-  
+
   CAMLreturn ( buffer );
 }
 
@@ -58,13 +60,13 @@ value caml_crypto_aead_xchacha20poly1305_ietf_encrypt(value message, value nonce
   CAMLlocal1 ( ciphertext );
 
   unsigned long long ciphertext_len;
-  
+
   size_t additional_data_len = 0;
   const unsigned char *additional_data = NULL;
 
   size_t message_len = caml_string_length(message);
   unsigned char * message_raw = String_val(message);
-  
+
   const size_t nonce_len = caml_string_length(nonce);
   unsigned char * nonce_raw = String_val(nonce);
 
@@ -84,7 +86,7 @@ value caml_crypto_aead_xchacha20poly1305_ietf_encrypt(value message, value nonce
 					     message_raw, message_len,
 					     additional_data, additional_data_len,
 					     NULL, nonce_raw, pkey_raw);
-  
+
 
   CAMLreturn ( ciphertext  );
 }
@@ -94,20 +96,18 @@ value caml_crypto_aead_xchacha20poly1305_ietf_decrypt(value ciphertext, value no
   size_t additional_data_len = 0;
   const unsigned char *additional_data = NULL;
   CAMLparam3 ( ciphertext, nonce, pkey );
-  CAMLlocal1 ( message );
+  CAMLlocal2 ( message, message_end );
 
   const size_t ciphertext_len = caml_string_length(ciphertext);
   unsigned char * ciphertext_raw = String_val(ciphertext);
 
-  
   const size_t nonce_len = caml_string_length(nonce);
   unsigned char * nonce_raw = String_val(nonce);
 
   const size_t pkey_len = caml_string_length(pkey);
   unsigned char * pkey_raw = String_val(pkey);
 
-
-  unsigned int message_size = 1025;
+  const unsigned int message_size = 1025;
   unsigned char * message_raw = NULL;
   message = caml_alloc_string( message_size );
   message_raw = String_val( message );
@@ -125,5 +125,11 @@ value caml_crypto_aead_xchacha20poly1305_ietf_decrypt(value ciphertext, value no
     printf("Success\n");
   }
 
-  CAMLreturn ( message );
+  const unsigned int message_l = strnlen(message_raw, message_size);
+  message_end = caml_alloc_string( message_l );
+  unsigned char * message_end_raw = String_val( message_end );
+  memset( message_end_raw, 0, message_l );
+  strncpy(message_end_raw, message_raw, message_l);
+
+  CAMLreturn ( message_end );
 }
