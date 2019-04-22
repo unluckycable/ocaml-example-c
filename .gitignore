@@ -1,4 +1,4 @@
-.cmi
-.cmx
-.o
+*.cmi
+*.cmx
+*.o
 prog1
